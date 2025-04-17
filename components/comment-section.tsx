@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { formatDate } from "@/lib/utils"
+import { useState } from "react"
 
 interface Comment {
   id: string
@@ -43,6 +43,7 @@ const mockComments: Comment[] = [
 export function CommentSection({ postSlug }: { postSlug: string }) {
   const [comments, setComments] = useState<Comment[]>(mockComments)
   const [newComment, setNewComment] = useState("")
+  // const slug = postSlug;
 
   const handleAddComment = () => {
     if (!newComment.trim()) return

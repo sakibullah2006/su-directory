@@ -28,12 +28,11 @@ export const post = defineType({
       // options: { to: {type: "user"}},
       to: { type: 'user' },
       validation: (Rule) => Rule.required()
-
     }),
-    
     defineField({
       name: 'view',
-      type: 'number'
+      type: 'number',
+      initialValue: 0
     }),
     defineField({
       name: 'category',
@@ -49,6 +48,27 @@ export const post = defineType({
       name: 'content',
       type: 'markdown',
     }),
+    {
+      name: 'likes',
+      title: 'Likes',
+      type: 'number',
+      initialValue: 0,
+      description: 'Total number of likes'
+    },
+    {
+      name: 'likedBy',
+      title: 'Liked By',
+      type: 'array',
+      of: [{
+        type: 'reference',
+        to: [{ type: 'user' }]
+      }],
+      description: 'Users who liked this post',
+      options: {
+        // Prevent duplicate references
+        disableNew: true
+      }
+    }
   ],
   // preview: {
   //   select: {

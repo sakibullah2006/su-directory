@@ -1,4 +1,4 @@
-import { groq } from "next-sanity";
+import { groq } from "next-sanity"
 
 export const AUTHOR_BY_GITHUB_ID_QUERY = groq`
 *[_type == "user" && id == $id][0]{
@@ -21,6 +21,7 @@ export const POSTS_QUERIES = groq`
   description, 
   category, 
   view,
+  likes,
   mainImage,
   author -> {
     _id,
@@ -29,8 +30,36 @@ export const POSTS_QUERIES = groq`
     imageUrl,
     bio
   },
-  content,
+  likes,
   _createdAt, 
   _updatedAt 
 }
 `
+export const POST_QUERY_BY_SLUG = groq`*[_type == "post" && slug.current == $slug][0]{
+  _id,
+  slug,
+  title,
+  likes,
+  description, 
+  category, 
+  view,
+  mainImage,
+  author -> {
+    _id,
+    name,
+    username, 
+    imageUrl
+  },
+  content,
+  likes,
+  likedBy[]->{_id, name, imageUrl},
+  "hasLiked": $userId in likedBy[]._ref,
+  _createdAt, 
+  _updatedAt 
+}
+`
+export const POST_LIKES_QUERY = groq`*[_type == "post" && _id == $postId][0]{
+  "userLiked": $userId in likedBy[]._ref,
+  likedBy[]->{_id, name, imageUrl},
+  likes
+}`
