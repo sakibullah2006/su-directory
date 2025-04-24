@@ -10,13 +10,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user, account, profile }) {
       // Type guard to ensure profile is from GitHub
       if (account?.provider === "github" && profile) {
-        const { name, email, image,  } = user;
-        const { login, id, bio, phone_number, gender } = profile as {
+        const { name, email, image } = user;
+        
+        const { login, id, bio, phone_number, gender} = profile as {
           login: string;
           id: string;
           bio?: string;
           phone_number?: string,
-          gender?: string
+          gender?: string,
         };
 
         try {

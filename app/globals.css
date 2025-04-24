@@ -2,7 +2,6 @@
 @import "tailwindcss" important;
 /*@import "tailwindcss";*/
 
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -46,8 +45,8 @@
 }
 
 :root {
-  --pink-primary: #EE2B69;
-  --pink-primary-100: #FFE8F0;
+  --pink-primary: oklch(0.5287 0.0751 11.22);
+  --pink-primary-100: oklch(0.964 0.045 11.22);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
@@ -83,39 +82,59 @@
 }
 
 .dark {
-  --pink-primary: #EE2B69;
-  --pink-primary-100: #FFE8F0;
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --pink-primary: #ee2b69;
+  --pink-primary-100: #ffe8f0;
+
+  /* Deeper, richer background - almost black with slight blue tint */
+  --background: oklch(0.15 0.015 255);
+  --foreground: oklch(0.98 0.005 255);
+
+  /* Slightly elevated card and popover backgrounds */
+  --card: oklch(0.2 0.02 255);
+  --card-foreground: oklch(0.98 0.005 255);
+  --popover: oklch(0.2 0.02 255);
+  --popover-foreground: oklch(0.98 0.005 255);
+
+  /* Vibrant but not overwhelming primary */
+  --primary: oklch(0.65 0.15 265);
+  --primary-foreground: oklch(0.98 0.005 255);
+
+  /* Subtle secondary */
+  --secondary: oklch(0.25 0.02 255);
+  --secondary-foreground: oklch(0.9 0.01 255);
+
+  /* Muted colors with better distinction */
+  --muted: oklch(0.22 0.015 255);
+  --muted-foreground: oklch(0.75 0.01 255);
+
+  /* Refined accent colors */
+  --accent: oklch(0.25 0.03 265);
+  --accent-foreground: oklch(0.98 0.005 255);
+
+  /* Brighter destructive for better visibility */
+  --destructive: oklch(0.65 0.2 25);
+
+  /* Subtle borders that don't distract */
+  --border: oklch(0.3 0.02 255 / 20%);
+  --input: oklch(0.3 0.02 255 / 15%);
+  --ring: oklch(0.65 0.15 265 / 50%);
+
+  /* Modern chart colors with better distinction */
+  --chart-1: oklch(0.65 0.15 265);
+  --chart-2: oklch(0.6 0.18 190);
+  --chart-3: oklch(0.7 0.18 70);
+  --chart-4: oklch(0.6 0.2 310);
+  --chart-5: oklch(0.65 0.2 20);
+
+  /* Sidebar colors that match the modern theme */
+  --sidebar: oklch(0.18 0.015 255);
+  --sidebar-foreground: oklch(0.98 0.005 255);
+  --sidebar-primary: oklch(0.65 0.15 265);
+  --sidebar-primary-foreground: oklch(0.98 0.005 255);
+  --sidebar-accent: oklch(0.25 0.02 255);
+  --sidebar-accent-foreground: oklch(0.9 0.01 255);
+  --sidebar-border: oklch(0.3 0.02 255 / 15%);
+  --sidebar-ring: oklch(0.65 0.15 265 / 50%);
 }
 
 @layer base {
@@ -125,35 +144,77 @@
   body {
     @apply bg-background text-foreground;
   }
-
-
 }
 
 @layer utilities {
-
-
   .pattern {
     background-image: linear-gradient(
-            to right,
-            transparent 49.5%,
-            rgba(251, 232, 67, 0.2) 49.5%,
-            rgba(251, 232, 67, 0.6) 50.5%,
-            transparent 50.5%
+      to right,
+      transparent 49.5%,
+      rgba(251, 232, 67, 0.2) 49.5%,
+      rgba(251, 232, 67, 0.6) 50.5%,
+      transparent 50.5%
     );
     background-size: 1.8% 100%;
     background-position: center;
     background-repeat: repeat-x;
   }
 
-  .pink_container {
-    @apply w-full min-h-[530px] bg-[var(--pink-primary)]  flex justify-center items-center flex-col py-10 px-6;
+  /* Pattern styles */
+  .pattern-grid {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 25%);
+    background-size: 30px 30px, 30px 30px, 100% 100%;
+    background-position: center;
+  }
 
+  .pattern-dots {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.15) 2px, transparent 2px);
+    background-size: 25px 25px;
+  }
+
+  .pattern-circuit {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      radial-gradient(circle at 25px 25px, rgba(255, 255, 255, 0.15) 2px, transparent 2px),
+      radial-gradient(circle at 75px 75px, rgba(255, 255, 255, 0.15) 2px, transparent 2px);
+    background-size: 100px 100px;
+  }
+
+  .gradient-bg {
+    background: linear-gradient(135deg, #19b6a9 0%, #0f766e 50%, #0e877f 100%);
+  }
+
+  /* Animation for subtle movement */
+  .animate-pattern {
+    animation: patternShift 20s linear infinite;
+  }
+
+  @keyframes patternShift {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+
+  /* Enhanced heading style */
+  .heading-enhanced {
+    @apply uppercase bg-black px-6 py-3 font-extrabold text-white sm:text-[55px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-center my-5;
+    box-shadow: 8px 8px 0 rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 10;
+  }
+
+  .pink_container {
+    @apply w-full min-h-[530px]  flex justify-center items-center flex-col py-10 px-6;
   }
 
   .section_container {
     @apply px-6 py-10 max-w-7xl mx-auto;
   }
-  
   .heading {
     @apply uppercase bg-black px-6 py-3 font-extrabold text-white sm:text-[55px] sm:leading-[64px] text-[36px] leading-[46px] max-w-5xl text-center my-5;
   }
@@ -172,7 +233,4 @@
   .card_grid-sm {
     @apply grid sm:grid-cols-2 gap-5;
   }
-
 }
-
-

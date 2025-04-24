@@ -13,8 +13,68 @@ export const AUTHOR_BY_GITHUB_ID_QUERY = groq`
 }
 `
 
-export const POSTS_QUERIES = groq`
-*[_type == "post"] | order(_createdAt desc){
+export const AUTHOR_BY_ID_QUERY = groq`
+*[_type == "user" && _id == $_id][0]{
+  _id, 
+  id,
+  name,
+  username,
+  email,
+  bio,
+  gender,
+  location,
+  imageUrl,
+  phone,
+  _createdAt
+}
+`
+
+// export const POSTS_QUERIES = groq`
+// *[_type == "post"] | order(_createdAt desc){
+//   _id,
+//   title,
+//   slug,
+//   description, 
+//   category, 
+//   view,
+//   likes,
+//   mainImage,
+//   author -> {
+//     _id,
+//     name,
+//     username, 
+//     imageUrl,
+//     bio
+//   },
+//   likes,
+//   _createdAt, 
+//   _updatedAt 
+// }
+// `
+
+export const POSTS_QUERIES = groq`*[_type == "post" && defined(slug.current) && !defined($search) || title match $search || category match $search || author->name match $search] | order(_createdAt desc) {
+ _id,
+  title,
+  slug,
+  description, 
+  category, 
+  view,
+  likes,
+  mainImage,
+  author -> {
+    _id,
+    name,
+    username, 
+    imageUrl,
+    bio
+  },
+  likes,
+  _createdAt, 
+  _updatedAt 
+}`
+
+export const POSTS_QUERIES_BY_AUTHOR_ID = groq`
+*[_type == "post" && author->_id==$_id] | order(_createdAt desc){
   _id,
   title,
   slug,
@@ -35,6 +95,7 @@ export const POSTS_QUERIES = groq`
   _updatedAt 
 }
 `
+
 export const POST_QUERY_BY_SLUG = groq`*[_type == "post" && slug.current == $slug][0]{
   _id,
   slug,

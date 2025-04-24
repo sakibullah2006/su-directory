@@ -16,7 +16,7 @@ const NavAvatar = ({ image, id }: { image: string, id: string }) => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <Link href={`users/${id}`}>
+        <Link href={`/users/${id}`}>
           <DropdownMenuItem >
             <div>
               Profile

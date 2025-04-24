@@ -1,85 +1,61 @@
 "use server"
 
 import { auth } from "@/auth"
+import { User } from "@/sanity.types"
 import { client } from "@/sanity/lib/client"
 import { sanityFetch } from "@/sanity/lib/live"
-import { POSTS_QUERIES, POST_LIKES_QUERY, POST_QUERY_BY_SLUG } from "@/sanity/lib/queries"
+import { AUTHOR_BY_ID_QUERY, POSTS_QUERIES, POSTS_QUERIES_BY_AUTHOR_ID, POST_LIKES_QUERY, POST_QUERY_BY_SLUG } from "@/sanity/lib/queries"
 import { writeClient } from "@/sanity/lib/write-client"
-import { PostLikesResult, PostWithAuthorAndLikes } from "@/types/sanity"
+import { PostLikesResult, PostWithAuthor, PostWithAuthorAndLikes } from "@/types/sanity"
 
+export interface Query_ParamsProps {
+  search?: string
+}  
 
-export const getAllPost = async (params?: object) => {
-  const { data: posts } = await sanityFetch({ query: POSTS_QUERIES, params: params })
+export const getAllPost = async (params: Query_ParamsProps): Promise<PostWithAuthor[]> =>  {
+  if(params.search){
+    const { data: posts } = await sanityFetch({ query: POSTS_QUERIES, params})
+    return posts
+ 
+  } else{
+    const { data: posts } = await sanityFetch({ query: POSTS_QUERIES, params: {search: null} })
 
-  return posts
+    return posts
+  }
+
 }
 
+
 export const getPostBySlug = async (slug: string): Promise<PostWithAuthorAndLikes> => {
-  const userId = (await auth())?.id;
+  const userId = (await auth());
 
   const post = await client.fetch(POST_QUERY_BY_SLUG, { slug, userId })
 
   return post;
 }
 
-// // export const unlikePost = async ({ postId }: { postId: string }) => {
-// //     const userId = (await auth())?.id;
+export const getAuthorById = async (_id: string): Promise<User> => {
+  try {
+    const post = await client.fetch(AUTHOR_BY_ID_QUERY, {_id: _id})
 
-// //     // Unlike the post
-// //     await writeClient
-// //         .patch(postId)
-// //         .setIfMissing({ likes: 0 }) // Safety measure
-// //         .unset([`likedBy[_ref=="${userId}"]`])
-// //         .dec({ likes: 1 })
-// //         .commit();
-// // }
+    return post
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 
-// // export const likePost = async ({ postId }: { postId: string }) => {
-// //     const userId = (await auth())?.id;
+export const getUserPosts = async ({_id}:{ _id: string}): Promise<PostWithAuthor[]> => {
+  try {
+    const posts = await client.fetch(POSTS_QUERIES_BY_AUTHOR_ID, {_id: _id})
 
-// //     // Like the post
-// //     await writeClient
-// //         .patch(postId)
-// //         .setIfMissing({ likes: 0, likedBy: [] }) // Initialize if missing
-// //         .insert('after', 'likedBy[-1]', [{ _ref: userId, _type: 'reference' }])
-// //         .inc({ likes: 1 })
-// //         .commit();
+    return posts
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
 
-// // }
-
-
-
-// export async function toggleLike({ postId }: { postId: string }) {
-//     const userId = (await auth())?.id
-
-//     // First check current like status
-//     const post = await client
-//         .withConfig({ useCdn: false })
-//         .fetch(
-//             POST_LIKES_QUERY,
-//             { postId, userId }
-//         );
-
-//     if (!post) throw new Error('Post not found');
-
-//     if (post.userLiked) {
-//         // Unlike the post
-//         return writeClient
-//             .patch(postId)
-//             .setIfMissing({ likes: 0 })
-//             .unset([`likedBy[_ref=="${userId}"]`])
-//             .dec({ likes: 1 })
-//             .commit();
-//     } else {
-//         // Like the post
-//         return writeClient
-//             .patch(postId)
-//             .setIfMissing({ likes: 0, likedBy: [] })
-//             .insert('after', 'likedBy[-1]', [{ _ref: userId, _type: 'reference' }])
-//             .inc({ likes: 1 })
-//             .commit();
-//     }
-// }
 interface ToggleLikeResult {
   success: boolean;
   newLikeStatus: boolean;
@@ -88,6 +64,7 @@ interface ToggleLikeResult {
 
 export async function toggleLike(postId: string): Promise<ToggleLikeResult> {
   const userId = (await auth())?.id
+
 
   try {
     // 1. Check current like status
@@ -113,7 +90,7 @@ export async function toggleLike(postId: string): Promise<ToggleLikeResult> {
       return {
         success: true,
         newLikeStatus: false,
-        likeCount: post.likes -1
+        likeCount: post.likes - 1
       };
     } else {
       // Like the post

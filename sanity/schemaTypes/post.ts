@@ -19,7 +19,7 @@ export const post = defineType({
     defineField({
       name: 'description',
       type: 'text',
-      validation: (Rule) => Rule.min(20).required().error("Enter a description for the post")
+      validation: (Rule) => Rule.min(20).max(160).required().error("Enter a description for the post within 160 characters length")
     }),
     defineField({
       title: "Author",

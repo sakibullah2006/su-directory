@@ -1,5 +1,5 @@
-import Navbar, { NavBarSkeleton } from "@/components/Navbar"
 import React, { Suspense } from "react"
+import Loading from "./loading"
 
 export default function MainLayout({
     children
@@ -8,11 +8,10 @@ export default function MainLayout({
 }>) {
     return (
         <>
-            <Suspense fallback={<NavBarSkeleton />}>
-                <Navbar />
-            </Suspense>
             <main>
-                {children}
+                <Suspense fallback={<Loading />}>
+                    {children}
+                </Suspense>
             </main>
         </>
     )

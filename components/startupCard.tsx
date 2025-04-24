@@ -25,7 +25,7 @@ const StartupCard = ({ post
         <h1 className="text-lg font-bold leading-tight line-clamp-2">{title}</h1>
 
         <div className="flex items-center justify-between gap-3 mb-1">
-          <Link href={`/user/${author?._id}`}>
+          <Link href={`/users/${author?._id}`}>
             <div className="flex gap-3 items-center">
               <Avatar className="h-8 w-8">
                 <AvatarImage className='' src={author?.imageUrl || "/placeholder.svg"} alt={author?.name} />
@@ -37,14 +37,14 @@ const StartupCard = ({ post
           <span className="text-xs text-muted-foreground">{formatDate(_createdAt)}</span>
         </div>
       </CardHeader>
-      <CardContent className="mb-0  p-4 pt-0 flex flex-col gap-4 justify-evenly">
+      <CardContent className="mb-0 p-4 pt-0 pb-0 flex flex-col gap-4 justify-evenly">
         <p className="text-sm text-muted-foreground line-clamp-3 break-words">{description}</p>
 
         <div className="relative max-h-30 w-full flex justify-center">
           <img src={mainImage || "/placeholder.svg"} alt={title!} className="object-cover w-full max-h-[164px] rounded-md" />
         </div>
         <div>
-          <Link className={badgeVariants()} href={`/?query=${category}`}>{category}</Link>
+          <Link className={badgeVariants({}) + `dark:invert`} href={`/?query=${category}`}>{category}</Link>
         </div>
 
       </CardContent>
@@ -55,7 +55,7 @@ const StartupCard = ({ post
           </Button>
         </Link>
       </CardFooter>
-    </Card>
+    </Card >
   )
 }
 

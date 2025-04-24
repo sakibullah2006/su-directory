@@ -25,6 +25,7 @@ export const user = defineType({
     defineField({
       name: 'phone',
       type: 'string',
+      validation: Rule => Rule.min(14)
     }),
     defineField({
       name: 'gender',
@@ -37,6 +38,12 @@ export const user = defineType({
     defineField({
       name: 'bio',
       type: 'text',
+      // validation: (Rule) => Rule.min(120)
+    }),   
+    defineField({
+      name: 'location',
+      type: 'text',
+      // validation: (Rule) => Rule.min(120)
     }),
   ],
   preview: {
