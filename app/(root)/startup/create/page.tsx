@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 const CreatePostPage = () => {
     return (
-        <div className="container max-w-3xl py-10">
+        <div className="container max-w-3xl py-10 mx-auto">
             <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tight">Create Post</h1>
                 <p className="text-muted-foreground">Share your thoughts with the community</p>

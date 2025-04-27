@@ -16,19 +16,18 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { updateProfile } from "@/lib/db-actions"
-import { profileFormSchema } from "@/lib/validation"
+import { ProfileFormValues, profileFormSchema } from "@/lib/validation"
 import { User } from "@/sanity.types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Calendar, HelpCircle, Mail, MapPin, MarsIcon, Phone, Settings, Venus } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
 
 
-type ProfileFormValues = z.infer<typeof profileFormSchema>
+
 
 const formatDate = (dateString: string) => {
     const date = new Date(dateString)

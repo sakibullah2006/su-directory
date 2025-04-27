@@ -233,4 +233,19 @@
   .card_grid-sm {
     @apply grid sm:grid-cols-2 gap-5;
   }
+
+  .w-md-editor-text-pre > code,
+  .w-md-editor-text-input {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+  }
+  
+  .w-md-editor {
+    --color-canvas-default: transparent !important;
+  }
+  
+  .wmde-markdown-var {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  }
 }

@@ -3,56 +3,32 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
-import { createClient } from "next-sanity"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import slugify from "slugify"
 import { toast } from "sonner"
 import { MarkdownEditor } from "./markdown-editor"
 
 // Add this import for the markdown editor styles
+import { createPost } from "@/lib/db-actions"
+import { slugifyTitle } from "@/lib/utils"
+import { CreateFormValues, createFormSchema } from "@/lib/validation"
 import "@uiw/react-markdown-preview/markdown.css"
 import "@uiw/react-md-editor/markdown-editor.css"
 
-// Sanity client configuration
-const client = createClient({
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
-    apiVersion: "2023-05-03",
-    useCdn: false,
-    token: process.env.NEXT_PUBLIC_SANITY_TOKEN,
-})
 
-// Form validation schema based on the Sanity schema
-const formSchema = z.object({
-    title: z.string().min(1, "Title is required"),
-    description: z
-        .string()
-        .min(20, "Description must be at least 20 characters")
-        .max(160, "Description must not exceed 160 characters"),
-    category: z
-        .string()
-        .min(2, "Category must be at least 2 characters")
-        .max(20, "Category must not exceed 20 characters"),
-    mainImage: z.string().url("Please enter a valid URL"),
-    content: z.string().optional(),
-})
-
-type FormValues = z.infer<typeof formSchema>
 
 export default function CreatePostForm() {
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const form = useForm<FormValues>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<CreateFormValues>({
+        resolver: zodResolver(createFormSchema),
         defaultValues: {
             title: "",
             description: "",
@@ -62,43 +38,26 @@ export default function CreatePostForm() {
         },
     })
 
-    async function onSubmit(values: FormValues) {
+    async function onSubmit(values: CreateFormValues) {
         setIsSubmitting(true)
 
         try {
             // Generate a slug from the title
-            const slug = slugify(values.title, {
-                replacement: '-',  // replace spaces with replacement character, defaults to `-`
-                remove: undefined, // remove characters that match regex, defaults to `undefined`
-                lower: true,      // convert to lower case, defaults to `false`
-                strict: false,     // strip special characters except replacement, defaults to `false`
-                locale: 'vi',      // language code of the locale to use
-                trim: true         // trim leading and trailing replacement chars, defaults to `true`
-            })
+            const slug = slugifyTitle(values.title)
 
-            // Create the post document in Sanity
-            await client.create({
-                _type: "post",
-                title: values.title,
-                slug: { current: slug },
-                description: values.description,
-                category: values.category,
-                mainImage: values.mainImage,
-                content: values.content,
-                // The author will be set to the current user, this is a placeholder
-                author: {
-                    _type: "reference",
-                    _ref: "current-user-id", // This should be replaced with the actual user ID
-                },
-            })
 
-            toast(
-                "Post created successfully", {
-                description: "Your post has been published.",
-            })
+            const result = await createPost({ fromData: values })
+            if (result.status === "SUCCESS") {
+                toast(
+                    "Post created successfully", {
+                    description: "Your post has been published.",
+                })
 
-            // Redirect to the post page
-            router.push(`/posts/${slug}`)
+                // Redirect to the post page`
+                router.push(`/startup/${slug}`)
+            }
+
+            return result;
         } catch (error) {
             console.error("Error creating post:", error)
             toast.error(
@@ -106,6 +65,10 @@ export default function CreatePostForm() {
                 description: "Your post couldn't be created. Please try again.",
             }
             )
+            return {
+                error: "An unexpected error has occurred",
+                status: "ERROR",
+            };
         } finally {
             setIsSubmitting(false)
         }
@@ -176,7 +139,7 @@ export default function CreatePostForm() {
                                     <img
                                         src={field.value || "/placeholder.svg"}
                                         alt="Featured image preview"
-                                        className="h-48 w-full object-cover"
+                                        className="h-48 w-full object-contain"
                                         onError={(e) => {
                                             e.currentTarget.src = "/placeholder.svg?height=192&width=384"
                                             e.currentTarget.alt = "Invalid image URL"

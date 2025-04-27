@@ -32,7 +32,8 @@ export function MarkdownEditor({ value, onChange }: MarkdownEditorProps) {
                     preview="edit"
                     height={300}
                     visibleDragbar={false}
-                    className="w-full rounded-md border border-input"
+                    className="w-full rounded-md border border-input bg-white dark:invert"
+                // fullscreen={true}
                 />
             )}
         </div>
