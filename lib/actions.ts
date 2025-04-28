@@ -12,18 +12,16 @@ export interface Query_ParamsProps {
   search?: string
 }  
 
-export const getAllPost = async (params: Query_ParamsProps): Promise<PostWithAuthor[]> =>  {
-  if(params.search){
-    const posts  = await client.fetch(POSTS_QUERIES, { params}, {useCdn: false})
-    return posts
- 
-  } else{
-    const  posts= await client.fetch(POSTS_QUERIES,  {search: null}, {useCdn: false} )
-
-    return posts
+export const getAllPost = async (params: Query_ParamsProps) => {
+  try {
+    return await client.fetch(POSTS_QUERIES, {
+      search: params.search || ''
+    });
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw error;
   }
-
-}
+};
 
 
 export const getPostBySlug = async (slug: string): Promise<PostWithAuthorAndLikes> => {

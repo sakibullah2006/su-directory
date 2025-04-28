@@ -24,7 +24,6 @@ export const updateProfile = async ({ userObj, userId }: { userObj: UserObj, use
     } catch (error) {
         throw error
     }
-
 }
 
 export const createPost = async ({ fromData }: { fromData: CreateFormValues }) => {

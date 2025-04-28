@@ -52,8 +52,13 @@ export const AUTHOR_BY_ID_QUERY = groq`
 // }
 // `
 
-export const POSTS_QUERIES = groq`*[_type == "post" && defined(slug.current) && !defined($search) || title match $search || category match $search || author->name match $search] | order(_createdAt desc) {
- _id,
+export const POSTS_QUERIES = groq`*[_type == "post" && defined(slug.current) && (
+  !defined($search) || 
+  title match "*" + $search + "*" || 
+  category match "*" + $search + "*" || 
+  author->name match "*" + $search + "*"
+)] | order(_createdAt desc) {
+  _id,
   title,
   slug,
   description, 
@@ -68,7 +73,6 @@ export const POSTS_QUERIES = groq`*[_type == "post" && defined(slug.current) && 
     imageUrl,
     bio
   },
-  likes,
   _createdAt, 
   _updatedAt 
 }`

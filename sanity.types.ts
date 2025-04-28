@@ -195,7 +195,7 @@ export type AUTHOR_BY_GITHUB_ID_QUERYResult = {
   phone: string | null;
 } | null;
 // Variable: AUTHOR_BY_ID_QUERY
-// Query: *[_type == "user" && _id == $_id][0]{  _id,   id,  name,  username,  email,  bio,  gender,  imageUrl,  phone,  _createdAt}
+// Query: *[_type == "user" && _id == $_id][0]{  _id,   id,  name,  username,  email,  bio,  gender,  location,  imageUrl,  phone,  _createdAt}
 export type AUTHOR_BY_ID_QUERYResult = {
   _id: string;
   id: number | null;
@@ -204,13 +204,35 @@ export type AUTHOR_BY_ID_QUERYResult = {
   email: string | null;
   bio: string | null;
   gender: string | null;
+  location: string | null;
   imageUrl: string | null;
   phone: string | null;
   _createdAt: string;
 } | null;
 // Variable: POSTS_QUERIES
-// Query: *[_type == "post"] | order(_createdAt desc){  _id,  title,  slug,  description,   category,   view,  likes,  mainImage,  author -> {    _id,    name,    username,     imageUrl,    bio  },  likes,  _createdAt,   _updatedAt }
+// Query: *[_type == "post" && defined(slug.current) && (  !defined($search) ||   title match "*" + $search + "*" ||   category match "*" + $search + "*" ||   author->name match "*" + $search + "*")] | order(_createdAt desc) {  _id,  title,  slug,  description,   category,   view,  likes,  mainImage,  author -> {    _id,    name,    username,     imageUrl,    bio  },  _createdAt,   _updatedAt }
 export type POSTS_QUERIESResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  description: string | null;
+  category: string | null;
+  view: number | null;
+  likes: number | null;
+  mainImage: string | null;
+  author: {
+    _id: string;
+    name: string | null;
+    username: string | null;
+    imageUrl: string | null;
+    bio: string | null;
+  } | null;
+  _createdAt: string;
+  _updatedAt: string;
+}>;
+// Variable: POSTS_QUERIES_BY_AUTHOR_ID
+// Query: *[_type == "post" && author->_id==$_id] | order(_createdAt desc){  _id,  title,  slug,  description,   category,   view,  likes,  mainImage,  author -> {    _id,    name,    username,     imageUrl,    bio  },  likes,  _createdAt,   _updatedAt }
+export type POSTS_QUERIES_BY_AUTHOR_IDResult = Array<{
   _id: string;
   title: string | null;
   slug: Slug | null;
@@ -273,8 +295,9 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "\n*[_type == \"user\" && id == $id][0]{\n  _id, \n  id,\n  name,\n  username,\n  email,\n  bio,\n  imageUrl,\n  phone\n}\n": AUTHOR_BY_GITHUB_ID_QUERYResult;
-    "\n*[_type == \"user\" && _id == $_id][0]{\n  _id, \n  id,\n  name,\n  username,\n  email,\n  bio,\n  gender,\n  imageUrl,\n  phone,\n  _createdAt\n}\n": AUTHOR_BY_ID_QUERYResult;
-    "\n*[_type == \"post\"] | order(_createdAt desc){\n  _id,\n  title,\n  slug,\n  description, \n  category, \n  view,\n  likes,\n  mainImage,\n  author -> {\n    _id,\n    name,\n    username, \n    imageUrl,\n    bio\n  },\n  likes,\n  _createdAt, \n  _updatedAt \n}\n": POSTS_QUERIESResult;
+    "\n*[_type == \"user\" && _id == $_id][0]{\n  _id, \n  id,\n  name,\n  username,\n  email,\n  bio,\n  gender,\n  location,\n  imageUrl,\n  phone,\n  _createdAt\n}\n": AUTHOR_BY_ID_QUERYResult;
+    "*[_type == \"post\" && defined(slug.current) && (\n  !defined($search) || \n  title match \"*\" + $search + \"*\" || \n  category match \"*\" + $search + \"*\" || \n  author->name match \"*\" + $search + \"*\"\n)] | order(_createdAt desc) {\n  _id,\n  title,\n  slug,\n  description, \n  category, \n  view,\n  likes,\n  mainImage,\n  author -> {\n    _id,\n    name,\n    username, \n    imageUrl,\n    bio\n  },\n  _createdAt, \n  _updatedAt \n}": POSTS_QUERIESResult;
+    "\n*[_type == \"post\" && author->_id==$_id] | order(_createdAt desc){\n  _id,\n  title,\n  slug,\n  description, \n  category, \n  view,\n  likes,\n  mainImage,\n  author -> {\n    _id,\n    name,\n    username, \n    imageUrl,\n    bio\n  },\n  likes,\n  _createdAt, \n  _updatedAt \n}\n": POSTS_QUERIES_BY_AUTHOR_IDResult;
     "*[_type == \"post\" && slug.current == $slug][0]{\n  _id,\n  slug,\n  title,\n  likes,\n  description, \n  category, \n  view,\n  mainImage,\n  author -> {\n    _id,\n    name,\n    username, \n    imageUrl\n  },\n  content,\n  likes,\n  likedBy[]->{_id, name, imageUrl},\n  \"hasLiked\": $userId in likedBy[]._ref,\n  _createdAt, \n  _updatedAt \n}\n": POST_QUERY_BY_SLUGResult;
     "*[_type == \"post\" && _id == $postId][0]{\n  \"userLiked\": $userId in likedBy[]._ref,\n  likedBy[]->{_id, name, imageUrl},\n  likes\n}": POST_LIKES_QUERYResult;
   }
