@@ -26,7 +26,7 @@ const Navbar = async () => {
                   <PlusCircleIcon className="size-6 sm:hidden" />
                 </Button>
               </Link>
-              <NavAvatar image={session.user.image} id={session.id} />
+              <NavAvatar image={session.user.image} id={session.id} asChild/>
 
             </>
           ) : (
@@ -41,7 +41,7 @@ const Navbar = async () => {
               </Button>
             </form>
           )}
-          <ModeToggle />
+          <ModeToggle asChild/>
 
         </div>
       </nav>
