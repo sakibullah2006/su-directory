@@ -12,8 +12,8 @@ export default function Loading() {
 
                 {/* Hero heading skeleton */}
                 <div className=" p-6 mb-4">
-                    <Skeleton className="h-14 w-[600px] mb-2 bg-white" />
-                    <Skeleton className="h-14 w-[600px] bg-white" />
+                    <Skeleton className="h-14 w-[600px] mb-2" />
+                    <Skeleton className="h-14 w-[600px] " />
                 </div>
 
                 {/* Subtitle skeleton */}
