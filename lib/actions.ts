@@ -3,7 +3,7 @@
 import { auth } from "@/auth"
 import { User } from "@/sanity.types"
 import { client } from "@/sanity/lib/client"
-import { sanityFetch } from "@/sanity/lib/live"
+// import { sanityFetch } from "@/sanity/lib/live"
 import { AUTHOR_BY_ID_QUERY, POSTS_QUERIES, POSTS_QUERIES_BY_AUTHOR_ID, POST_LIKES_QUERY, POST_QUERY_BY_SLUG } from "@/sanity/lib/queries"
 import { writeClient } from "@/sanity/lib/write-client"
 import { PostLikesResult, PostWithAuthor, PostWithAuthorAndLikes } from "@/types/sanity"
@@ -14,11 +14,11 @@ export interface Query_ParamsProps {
 
 export const getAllPost = async (params: Query_ParamsProps): Promise<PostWithAuthor[]> =>  {
   if(params.search){
-    const { data: posts } = await sanityFetch({ query: POSTS_QUERIES, params})
+    const posts  = await client.fetch(POSTS_QUERIES, { params}, {useCdn: false})
     return posts
  
   } else{
-    const { data: posts } = await sanityFetch({ query: POSTS_QUERIES, params: {search: null} })
+    const  posts= await client.fetch(POSTS_QUERIES,  {search: null}, {useCdn: false} )
 
     return posts
   }
