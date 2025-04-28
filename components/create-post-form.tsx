@@ -43,14 +43,14 @@ export default function CreatePostForm() {
 
         try {
             // Generate a slug from the title
-            const slug = slugifyTitle(values.title)
+            const slug = slugifyTitle(values.title as string)
 
 
             const result = await createPost({ fromData: values })
             if (result.status === "SUCCESS") {
                 toast(
                     "Post created successfully", {
-                    description: "Your post has been published.",
+                    description: "Post creation done",
                 })
 
                 // Redirect to the post page`

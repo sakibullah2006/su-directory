@@ -37,16 +37,16 @@ export const createPost = async ({ fromData }: { fromData: CreateFormValues }) =
         });
 
     try {
-        const slug = slugifyTitle(fromData.title)
+        const slug = slugifyTitle(fromData.title as string)
 
         // Create the post document in Sanity
         const postData = {
             _type: "post",
-            title: fromData.title,
-            slug: { current: slug },
-            description: fromData.description,
-            category: fromData.category,
-            mainImage: fromData.mainImage,
+            title: fromData.title as string,
+            slug: { _type: slug, current: slug },
+            description: fromData.description as string,
+            category: fromData.category as string,
+            mainImage: fromData.mainImage as string,
             content: fromData.content,
             // The author will be set to the current user, this is a placeholder
             author: {

@@ -19,7 +19,7 @@ export function formatDate(dateString: string): string {
 
 export const slugifyTitle = (title: string) => {
 
-  slugify(title, {
+  const slug = slugify(title, {
     replacement: '-',  // replace spaces with replacement character, defaults to `-`
     remove: undefined, // remove characters that match regex, defaults to `undefined`
     lower: true,      // convert to lower case, defaults to `false`
@@ -27,6 +27,8 @@ export const slugifyTitle = (title: string) => {
     locale: 'vi',      // language code of the locale to use
     trim: true         // trim leading and trailing replacement chars, defaults to `true`
   })
+
+  return slug
 }
 
 export function parseServerActionResponse<T>(response: T) {
