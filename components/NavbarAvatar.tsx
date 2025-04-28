@@ -1,17 +1,23 @@
 "use client";
 
-import { signOut } from '@/auth';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Skeleton } from './ui/skeleton';
 
 const NavAvatar = ({ image, id }: { image: string, id: string }) => {
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const handleSignOut = async () => {
-    await signOut({ redirectTo: "/" })
-  }
+    setIsSigningOut(true);
+    try {
+      await signOut({ callbackUrl: "/" });
+    } finally {
+      setIsSigningOut(false);
+    }
+  };
 
   return (
     <DropdownMenu>
@@ -28,14 +34,14 @@ const NavAvatar = ({ image, id }: { image: string, id: string }) => {
           </Link>
         </DropdownMenuItem>
 
-        <DropdownMenuItem>
-
-          <button onClick={handleSignOut} type="submit" className='cursor-pointer'>
-            <span className="">Log Out</span>
-            {/* <LogOut className="size-6 text-red-600 sm:hidden" /> */}
-          </button>
-
+        <DropdownMenuItem
+          className="cursor-pointer focus:bg-red-50 focus:text-red-500"
+          onClick={handleSignOut}
+          disabled={isSigningOut}
+        >
+          {isSigningOut ? "Signing out..." : "Log Out"}
         </DropdownMenuItem>
+
       </DropdownMenuContent>
     </DropdownMenu>
   )
