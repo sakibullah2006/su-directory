@@ -10,7 +10,6 @@ import { Skeleton } from './ui/skeleton';
 const NavAvatar = ({ image, id }: { image: string, id: string }) => {
 
   const handleSignOut = async () => {
-    "use server";
     await signOut({ redirectTo: "/" })
   }
 
