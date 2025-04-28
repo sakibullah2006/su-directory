@@ -8,8 +8,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import UserProjectCard from "@/components/user-project-card"
 import { getAuthorById, getUserPosts } from "@/lib/actions"
 import { Activity, FileText, Users } from "lucide-react"
+import { Metadata } from "next"
 import { Suspense } from "react"
 import { ProfielCardSkeleton } from "./loading"
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const _id = (await params).id;
+
+  const user = await getAuthorById(_id); // Fetch user data
+
+  return {
+    title: `${user.name}'s Profile | SU Directory`,
+    description: `View ${user.name}'s profile.`,
+
+    openGraph: {
+      images: [user.imageUrl],
+    },
+  };
+}
 
 const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const _id = (await params).id;

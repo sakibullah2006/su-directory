@@ -1,6 +1,26 @@
 import CardsGrid from '@/components/card-view';
 import SearchBar from '@/components/search-bar';
 import { Query_ParamsProps, getAllPost } from '@/lib/actions';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'SU Directory | Startup Stage',
+  description: 'Pitch your startup and get noticed by potential investors',
+  openGraph: {
+    title: 'SU Directory | Startup Stage',
+    description: 'Pitch your startup and get noticed by potential investors',
+    url: 'https://su-directory-plum.vercel.app/',
+    images: [
+      {
+        url: 'https://su-directory-plum.vercel.app/main_thumnail.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
+
+};
+
 
 const Home = async ({ searchParams }: { searchParams: Promise<{ query?: string }> }) => {
   const query = (await searchParams).query;

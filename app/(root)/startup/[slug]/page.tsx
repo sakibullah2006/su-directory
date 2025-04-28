@@ -9,10 +9,42 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { getPostBySlug } from "@/lib/actions"
 import { formatDate } from "@/lib/utils"
 import { PostWithAuthorAndLikes } from "@/types/sanity"
+import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const slug = (await params).slug
+  const post: PostWithAuthorAndLikes = await getPostBySlug(slug);
 
+  return {
+    title: `${post.title} | Your Blog Name`,
+    description: `${post.title} - A blog post by ${post.author?.name}`,
+    alternates: {
+      canonical: `https://yourdomain.com/startup/${slug}`,
+    },
+    openGraph: {
+      title: post.title,
+      description: `Read this post by ${post.author?.name}`,
+      url: `https://yourdomain.com/startup/${slug}`,
+      type: 'article',
+      publishedTime: post._createdAt,
+      authors: [post.author?.name || 'Unknown Author'],
+      images: [
+        {
+          url: post.mainImage || '/default-og-image.jpg',
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+  };
+}
 
 const BlogPost = async ({ params }: { params: { slug: string } }) => {
   const userId = (await auth())?.id
