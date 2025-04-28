@@ -26,7 +26,7 @@ export default function SearchBar({ initialQuery }: { initialQuery?: string }) {
                 placeholder="Search..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="pr-10 rounded-r-nonoe rounded-l-full w-full h-full bg-gray-50 text-slate-50 opacity-100"
+                className="pr-10 rounded-r-nonoe rounded-l-full w-full h-full bg-gray-50 text-slate-950 dark:text-slate-50   opacity-100"
                 aria-label="Search query"
             />
             <Button type="submit" variant="default" size="icon" className="rounded-l-none h-full" aria-label="Search">
