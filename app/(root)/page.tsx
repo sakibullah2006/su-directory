@@ -50,7 +50,7 @@ const Home = async ({ searchParams }: { searchParams: Promise<{ query?: string }
 
       <section className='section_container space-y-4'>
 
-        <p className='text-3xl'>All Startups</p>
+        <p className='text-3xl'>{query ? "Search Results" : "All Startups"}</p>
 
         <CardsGrid posts={posts} />
       </section>

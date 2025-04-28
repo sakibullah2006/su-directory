@@ -16,6 +16,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { updateProfile } from "@/lib/db-actions"
+import { formatDate } from "@/lib/utils"
 import { ProfileFormValues, profileFormSchema } from "@/lib/validation"
 import { User } from "@/sanity.types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -27,13 +28,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 
 
 
-
-
-const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
-}
-
 interface ProfileCardProps {
     user: User
     currentUser: string
@@ -41,7 +35,6 @@ interface ProfileCardProps {
 }
 
 const ProfileCard = ({ user, currentUser, isEditable }: ProfileCardProps) => {
-    const [open, setOpen] = useState(false)
     const [userData, setUserData] = useState({ email: user.email, phone: user.phone, gender: user.gender, location: user.location })
     const { name, username, imageUrl, _createdAt } = user
 
@@ -82,8 +75,6 @@ const ProfileCard = ({ user, currentUser, isEditable }: ProfileCardProps) => {
                 description: "Failed to update Profile. Please try again.",
             })
             console.error("Failed to save bio:", error)
-        } finally {
-            setOpen(false)
         }
         console.log("Form submitted:", data)
     }
@@ -167,10 +158,9 @@ const ProfileCard = ({ user, currentUser, isEditable }: ProfileCardProps) => {
                 </div> */}
             </CardContent>
             <CardFooter>
-                {
-                    isEditable &&
+                {isEditable && (
 
-                    <Dialog open={open} onOpenChange={setOpen}>
+                    <Dialog>
                         <DialogTrigger asChild>
                             <Button variant="outline" className="w-full">
                                 <Settings className="mr-2 h-4 w-4" /> Edit Profile
@@ -179,7 +169,9 @@ const ProfileCard = ({ user, currentUser, isEditable }: ProfileCardProps) => {
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
                                 <DialogTitle>Edit Profile</DialogTitle>
-                                <DialogDescription>Make changes to your profile information here.</DialogDescription>
+                                <DialogDescription>
+                                    Make changes to your profile information here.
+                                </DialogDescription>
                             </DialogHeader>
                             <Form {...form}>
                                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
@@ -251,7 +243,7 @@ const ProfileCard = ({ user, currentUser, isEditable }: ProfileCardProps) => {
                             </Form>
                         </DialogContent>
                     </Dialog>
-                }
+                )}
             </CardFooter>
         </Card>
     )

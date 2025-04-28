@@ -20,18 +20,13 @@ import { Skeleton } from "./ui/skeleton"
 
 interface AboutCardProps {
     initialBio?: string
-    // postId: string,
     userId: string
-
     isEditable: boolean
-
-    // onSave?: (bio: string) => Promise<void>
 }
 
 export default function AboutCard({ userId, initialBio, isEditable }: AboutCardProps) {
     const [bio, setBio] = useState(initialBio)
     const [editedBio, setEditedBio] = useState(initialBio)
-    const [isOpen, setIsOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSave = async () => {
@@ -39,22 +34,15 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
 
         try {
             setIsLoading(true)
-            // update bio
             await updateProfile({ userObj: property, userId })
-            // update UI
             setBio(editedBio)
-            setIsOpen(false)
-            toast.success(
-                "Bio updated", {
+            toast.success("Bio updated", {
                 description: "Your bio has been successfully updated.",
-            },
-            )
-        } catch (error) {
-            toast.error(
-                "Error", {
+            })
+        } catch {
+            toast.error("Error", {
                 description: "Failed to update bio. Please try again.",
             })
-            console.error("Failed to save bio:", error)
         } finally {
             setIsLoading(false)
         }
@@ -64,10 +52,10 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
         <Card className="shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>About</CardTitle>
-                {isEditable &&
-                    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                {isEditable && (
+                    <Dialog>
                         <DialogTrigger asChild>
-                            <Button variant="ghost" size="icon" onClick={() => setEditedBio(bio)}>
+                            <Button variant="ghost" size="icon">
                                 <Edit className="h-4 w-4" />
                                 <span className="sr-only">Edit bio</span>
                             </Button>
@@ -75,7 +63,9 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
                                 <DialogTitle>Edit Bio</DialogTitle>
-                                <DialogDescription>{`Make changes to your bio here. Click save when you're done.`}</DialogDescription>
+                                <DialogDescription>
+                                    Make changes to your bio here. Click save when you&apos;re done.
+                                </DialogDescription>
                             </DialogHeader>
                             <div className="grid gap-4 py-4">
                                 <Textarea
@@ -86,7 +76,7 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
                                 />
                             </div>
                             <DialogFooter>
-                                <Button variant="outline" onClick={() => setIsOpen(false)}>
+                                <Button variant="outline" onClick={() => setEditedBio(bio)}>
                                     Cancel
                                 </Button>
                                 <Button onClick={handleSave} disabled={isLoading}>
@@ -95,15 +85,16 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
                             </DialogFooter>
                         </DialogContent>
                     </Dialog>
-                }
+                )}
             </CardHeader>
             <CardContent className="-mt-6 text-center">
-                <p className="text-muted-foreground whitespace-pre-line">{bio ? bio : "Bio is empty"}</p>
+                <p className="text-muted-foreground whitespace-pre-line">
+                    {bio || "Bio is empty"}
+                </p>
             </CardContent>
         </Card>
     )
 }
-
 
 export const AboutCardSkeleton = () => {
     return (
