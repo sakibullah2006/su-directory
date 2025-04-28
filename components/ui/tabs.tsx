@@ -1,35 +1,38 @@
 "use client"
 
-import { cn } from "@/lib/utils"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
 import * as React from "react"
+import * as TabsPrimitive from "@radix-ui/react-tabs"
 
-const Tabs = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Root
-    ref={ref}
-    className={cn("flex flex-col gap-2", className)}
-    {...props}
-  />
-))
-Tabs.displayName = TabsPrimitive.Root.displayName
+import { cn } from "@/lib/utils"
 
-const TabsList = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
-      className
-    )}
-    {...props}
-  />
-))
-TabsList.displayName = TabsPrimitive.List.displayName
+function Tabs({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.Root>) {
+  return (
+    <TabsPrimitive.Root
+      data-slot="tabs"
+      className={cn("flex flex-col gap-2", className)}
+      {...props}
+    />
+  )
+}
+
+function TabsList({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsPrimitive.List>) {
+  return (
+    <TabsPrimitive.List
+      data-slot="tabs-list"
+      className={cn(
+        "bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
 function TabsTrigger({
   className,
@@ -60,5 +63,4 @@ function TabsContent({
   )
 }
 
-export { Tabs, TabsContent, TabsList, TabsTrigger }
-
+export { Tabs, TabsList, TabsTrigger, TabsContent }
