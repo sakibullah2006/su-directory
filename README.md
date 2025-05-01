@@ -1,7 +1,10 @@
 # SU Directory
 A platform for startups to pitch their ideas and connect with entrepreneurs, built with Next.js, Sanity, Auth.js, and modern web technologies.
+
 \
+
 **Live Preview**
+
 [https://su-directory-plum.vercel.app/](https://su-directory-plum.vercel.app/)
  \
 ![image](https://github.com/user-attachments/assets/182a0938-3a47-4794-8b30-7e254622803b)
