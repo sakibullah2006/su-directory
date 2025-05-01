@@ -5,7 +5,9 @@ A platform for startups to pitch their ideas and connect with entrepreneurs, bui
 **Live Preview**
 
 [https://su-directory-plum.vercel.app/](https://su-directory-plum.vercel.app/)
- \
+ 
+\
+
 ![image](https://github.com/user-attachments/assets/182a0938-3a47-4794-8b30-7e254622803b)
 ![image](https://github.com/user-attachments/assets/8e394d05-430a-4f3d-8685-c8beac1de60c)
 ![image](https://github.com/user-attachments/assets/fdcb47fb-7bda-4aae-8da4-7f1f6b0131c5)
