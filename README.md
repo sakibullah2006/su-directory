@@ -1,7 +1,6 @@
 # SU Directory
 A platform for startups to pitch their ideas and connect with entrepreneurs, built with Next.js, Sanity, Auth.js, and modern web technologies.
 
-\
 
 **Live Preview**
 
