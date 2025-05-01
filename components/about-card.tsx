@@ -28,6 +28,7 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
     const [bio, setBio] = useState(initialBio)
     const [editedBio, setEditedBio] = useState(initialBio)
     const [isLoading, setIsLoading] = useState(false)
+    const [open, setOpen] = useState(false)
 
     const handleSave = async () => {
         const property: UserObj = { bio: editedBio }
@@ -39,6 +40,7 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
             toast.success("Bio updated", {
                 description: "Your bio has been successfully updated.",
             })
+            setOpen(false) // Close dialog after successful save
         } catch {
             toast.error("Error", {
                 description: "Failed to update bio. Please try again.",
@@ -48,12 +50,17 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
         }
     }
 
+    const handleCancel = () => {
+        setEditedBio(bio) // Reset to original bio
+        setOpen(false) // Close the dialog
+    }
+
     return (
         <Card className="shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>About</CardTitle>
                 {isEditable && (
-                    <Dialog>
+                    <Dialog open={open} onOpenChange={setOpen}>
                         <DialogTrigger asChild>
                             <Button variant="ghost" size="icon">
                                 <Edit className="h-4 w-4" />
@@ -63,9 +70,7 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
                                 <DialogTitle>Edit Bio</DialogTitle>
-                                <DialogDescription>
-                                    Make changes to your bio here. Click save when you&apos;re done.
-                                </DialogDescription>
+                                <DialogDescription>Make changes to your bio here. Click save when you&apos;re done.</DialogDescription>
                             </DialogHeader>
                             <div className="grid gap-4 py-4">
                                 <Textarea
@@ -76,7 +81,7 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
                                 />
                             </div>
                             <DialogFooter>
-                                <Button variant="outline" onClick={() => setEditedBio(bio)}>
+                                <Button variant="outline" onClick={handleCancel}>
                                     Cancel
                                 </Button>
                                 <Button onClick={handleSave} disabled={isLoading}>
@@ -88,9 +93,7 @@ export default function AboutCard({ userId, initialBio, isEditable }: AboutCardP
                 )}
             </CardHeader>
             <CardContent className="-mt-6 text-center">
-                <p className="text-muted-foreground whitespace-pre-line">
-                    {bio || "Bio is empty"}
-                </p>
+                <p className="text-muted-foreground whitespace-pre-line">{bio || "Bio is empty"}</p>
             </CardContent>
         </Card>
     )

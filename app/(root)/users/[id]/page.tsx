@@ -3,7 +3,7 @@
 import { auth } from "@/auth"
 import AboutCard, { AboutCardSkeleton } from "@/components/about-card"
 import { PatternBackground } from "@/components/pattern-background"
-import ProfileCard from "@/components/profile-card-demo"
+import ProfileCard from "@/components/profile-card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import UserProjectCard from "@/components/user-project-card"
 import { getAuthorById, getUserPosts } from "@/lib/actions"
