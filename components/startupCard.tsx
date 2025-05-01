@@ -22,7 +22,9 @@ const StartupCard = ({ post
   return (
     <Card className="overflow-hidden max-w-sm w-full justify-evenly mx-auto">
       <CardHeader className=" p-4 pb-0">
-        <h1 className="text-lg font-bold leading-tight line-clamp-2">{title}</h1>
+        <Link href={`/startup/${slug.current}`}>
+          <h1 className="text-lg font-bold leading-tight line-clamp-2">{title}</h1>
+        </Link>
 
         <div className="flex items-center justify-between gap-3 mb-1">
           <Link href={`/users/${author?._id}`}>

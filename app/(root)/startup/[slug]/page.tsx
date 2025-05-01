@@ -12,6 +12,7 @@ import { PostWithAuthorAndLikes } from "@/types/sanity"
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
+import { notFound } from "next/navigation"
 
 export async function generateMetadata({
   params,
@@ -20,6 +21,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const slug = (await params).slug
   const post: PostWithAuthorAndLikes = await getPostBySlug(slug);
+
+  if (!post) return {
+    title: "Page Not Found"
+  };
+
 
   return {
     title: `${post.title} | Your Blog Name`,
@@ -52,6 +58,9 @@ const BlogPost = async ({ params }: { params: { slug: string } }) => {
   // const post = await getBlogPost(slug)
 
   const post: PostWithAuthorAndLikes = await getPostBySlug(slug)
+
+  if (!post) return notFound();
+
 
   return (
     <article className="container max-w-3xl py-6 lg:py-12 mx-auto px-4">

@@ -9,6 +9,7 @@ import UserProjectCard from "@/components/user-project-card"
 import { getAuthorById, getUserPosts } from "@/lib/actions"
 import { Activity, FileText, Users } from "lucide-react"
 import { Metadata } from "next"
+import { notFound } from "next/navigation"
 import { Suspense } from "react"
 import { ProfielCardSkeleton } from "./loading"
 
@@ -16,6 +17,11 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   const _id = (await params).id;
 
   const user = await getAuthorById(_id); // Fetch user data
+
+  if (!user) return {
+    title: "Page Not Found"
+  };
+
 
   return {
     title: `${user.name}'s Profile | SU Directory`,
@@ -35,6 +41,9 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
     getUserPosts({ _id }),
     getAuthorById(_id)
   ])
+
+  if (user === null) return notFound();
+
 
 
   // const { name, username, imageUrl, _createdAt, bio, gender, email, phone } = await getAuthorById(_id)
